@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
   constructor(private http: Http) {}
 
   ngOnInit() {
-     this.http.get('http://localhost:3000/api')
+     this.http.get('/api')
       .map((response: Response) => response.json())
         .subscribe(
           (data: any) => {
