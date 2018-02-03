@@ -38,7 +38,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h1>\n  {{message}}\n</h1>\n"
+module.exports = ""
 
 /***/ }),
 
@@ -105,6 +105,10 @@ var platform_browser_1 = __webpack_require__("../../../platform-browser/esm5/pla
 var core_1 = __webpack_require__("../../../core/esm5/core.js");
 var forms_1 = __webpack_require__("../../../forms/esm5/forms.js");
 var http_1 = __webpack_require__("../../../http/esm5/http.js");
+var animations_1 = __webpack_require__("../../../platform-browser/esm5/animations.js");
+var menu_1 = __webpack_require__("../../../material/esm5/menu.es5.js");
+var icon_1 = __webpack_require__("../../../material/esm5/icon.es5.js");
+var progress_spinner_1 = __webpack_require__("../../../material/esm5/progress-spinner.es5.js");
 var app_component_1 = __webpack_require__("../../../../../src/app/app.component.ts");
 var AppModule = /** @class */ (function () {
     function AppModule() {
@@ -117,7 +121,11 @@ var AppModule = /** @class */ (function () {
             imports: [
                 platform_browser_1.BrowserModule,
                 forms_1.FormsModule,
-                http_1.HttpModule
+                http_1.HttpModule,
+                animations_1.BrowserAnimationsModule,
+                progress_spinner_1.MatProgressSpinnerModule,
+                menu_1.MatMenuModule,
+                icon_1.MatIconModule
             ],
             providers: [],
             bootstrap: [app_component_1.AppComponent]

@@ -1,8 +1,10 @@
 const express = require('express');
+const app = express();
 const bodyParser = require('body-parser');
 const path = require('path');
 const http = require('http');
-const app = express();
+const server = http.createServer(app);
+const io = require('socket.io')(server);
 const firebase = require('firebase');
 
 const api = require('./routes/api');
@@ -17,6 +19,17 @@ var config = {
     messagingSenderId: "639560879071"
   };
 firebase.initializeApp(config);
+
+app.db = firebase.database();
+
+var CLIENT_ID = 'hmU5ww6oHOucYB9hXfN33ZJf8EdKD018';
+var CLIENT_SECRET = '018EJZDOwrALAkxcudBmmVUL70dG4bZnuyDUVAB93H6-o-kGgF9fqW9ppeAS9RcE';
+var authObj = {
+    client_id: CLIENT_ID,
+    client_secret: CLIENT_SECRET,
+    grant_type: 'client_credentials',
+    audience: 'http://chitchat-cepheus.com'
+}
 
 // Parsers
 app.use(bodyParser.json());
@@ -35,15 +48,38 @@ app.use(function (req, res, next) {
 // API location
 app.use('/api', api);
 
+// Send test requests to test file
+app.get('/test', (req, res) => {
+    res.sendFile(path.join(__dirname, 'test_chat.html'));
+});
+
 // Send all other requests to the Angular app
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
+// Catch socket connections from http server
+io.on('connection', function(socket){
+    console.log('User connected');
+
+    // socket.on('room', function(room){
+    //     console.log('User joined room ' + room);
+    //     socket.join('room', room);
+    // });
+
+    socket.on('message', function(payload){
+        console.log('User joined room ' + payload.room);
+        socket.join(payload.room);
+        io.to(payload.room).emit('message', payload.username + ": " + payload.message);
+    });
+  
+    socket.on('disconnect', function(){
+    console.log('User disconnected');
+    });
+});
+
 //Set Port
 const port = process.env.PORT || '3000';
 app.set('port', port);
-
-const server = http.createServer(app);
 
 server.listen(port, () => console.log(`Running on localhost:${port}`));
