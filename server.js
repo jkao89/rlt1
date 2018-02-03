@@ -58,19 +58,18 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
-// Catch socket connections from http server
+// Catch socket connections over http server
 io.on('connection', function(socket){
     console.log('User connected');
 
-    // socket.on('room', function(room){
-    //     console.log('User joined room ' + room);
-    //     socket.join('room', room);
-    // });
-
-    socket.on('message', function(payload){
+    socket.on('join', function(payload){
         console.log('User joined room ' + payload.room);
         socket.join(payload.room);
-        io.to(payload.room).emit('message', payload.username + ": " + payload.message);
+        io.to(payload.room).emit('broadcast', "New user '" + payload.username + "' has joined the room.");
+    });
+    
+    socket.on('message', function(payload){
+        io.to(payload.room).emit('broadcast', payload.username + ": " + payload.message);
     });
   
     socket.on('disconnect', function(){

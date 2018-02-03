@@ -10,15 +10,24 @@
 </head>
 
 <body>
-  <form action="">
+  <form id="chatRoom" action="">
     <fieldset>
-			<legend>Send a chat message</legend>
-			<label>Chat room name: <input type="text" id="room"></label>
-			<label>Username: <input type="text" id="username"></label>
-			<label>Message: <input type="text" id="message"></label>
-			<input type="submit" id="submit" value="Send">
+			<legend>Join or create a chat room</legend>
+			<label>Chat room name: <input type="text" id="room" required></label>
+			<label>Username: <input type="text" id="username" required></label>
+			<input type="submit" id="joinRoom" value="Join">
 		</fieldset>
   </form>
+  
+  </br>
+  <form style="display:none" id="chatMessage" action="">
+    <fieldset>
+      <legend>Send messages to chat room</legend>
+      <label>Message: <input type="text" id="message" required></label>
+      <input type="submit" id="send" value="Send">
+    </fieldset>
+  </form>
+
   
   <ul id="messageList"></ul>
 
@@ -26,30 +35,30 @@
   <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
   <script>
     $(function () {
-      
-      $(document).ready(function(){
-        $('#submit').attr('disabled',true);
-        $('#message').keyup(function(){
-          if($(this).val().length !=0 && $('#room').val().length !=0)
-            $('#submit').attr('disabled', false);            
-          else
-            $('#submit').attr('disabled',true);
-        })
-      });
-          
       var socket = io();
-      $('form').submit(function(){
+      $('#chatRoom').submit(function(){
+        socket.emit('join', { room: $('#room').val(),
+                              username: $('#username').val(),
+                            });
+        
+        $('#room').attr('disabled',true);
+        $('#username').attr('disabled',true);
+        $('#joinRoom').attr('disabled',true);
+        $('#chatMessage').attr('style',"display:block");
+        return false;
+      });
+      
+      $('#chatMessage').submit(function(){
         socket.emit('message', {  room: $('#room').val(),
                                   username: $('#username').val(),
                                   message: $('#message').val()
-                                }
-        );
+                                });
+        
         $('#message').val('');
-        $('#submit').attr('disabled',true);
-        $('#room').attr('disabled',true);
         return false;
       });
-      socket.on('message', function(msg){
+        
+      socket.on('broadcast', function(msg){
         $('#messageList').append($('<li>').text(msg));
       });
     });
