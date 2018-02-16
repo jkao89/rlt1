@@ -58,8 +58,9 @@
         return false;
       });
         
-      socket.on('broadcast', function(msg){
-        $('#messageList').append($('<li>').text(msg));
+      socket.on('broadcast', function(payload){
+        var message = payload.timeStamp + '    ' + payload.username + ': ' + payload.type;
+        $('#messageList').append($('<li>').text(message));
       });
     });
   </script>

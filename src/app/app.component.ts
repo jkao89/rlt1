@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'app-root',
@@ -9,19 +8,9 @@ import 'rxjs/add/operator/map';
 })
 export class AppComponent implements OnInit {
 
-  message = "";
-
-  constructor(private http: Http) {}
+  constructor() {}
 
   ngOnInit() {
-     this.http.get('/api')
-      .map((response: Response) => response.json())
-        .subscribe(
-          (data: any) => {
-            console.log(data);
-            this.message = data.message;
-          }
-        );
   }
 
 }

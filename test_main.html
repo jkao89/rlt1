@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>TEST MAIN PAGE</title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body>
+  <form>
+    <fieldset>
+		<legend>Select an option</legend>
+			<input type="radio" name="roomRadio" id="newRoom">
+      <label for="newRoom">Create new chat room</label>
+      </br>
+      <input type="radio" name="roomRadio" id="existingRoom">
+      <label for="existingRoom">Join existing chat room</label>
+  	</fieldset>
+  </form>
+  
+  <form style="display:none" id="createRoom" action="">
+    <fieldset>
+			<legend>Create a new chat room</legend>
+			<input type="submit" id="createRoomSubmit" value="Create Room">
+		</fieldset>
+  </form>
+  
+  <form style="display:none" id="joinRoom" action="" method="post">
+    <fieldset>
+			<legend>Join a chat room</legend>
+			<label>Chat room ID: <input type="text" id="room" required></label>
+			<label>Username: <input type="text" id="username" required></label>
+			<input type="submit" id="joinRoomSubmit" value="Join Room">
+		</fieldset>
+  </form>
+  
+  <form style="display:none" id="chatMessage" action="">
+    <fieldset>
+      <legend>Send messages to chat room</legend>
+      <label>Message: <input type="text" id="message" required></label>
+      <input type="submit" id="send" value="Send">
+    </fieldset>
+  </form>
+  
+  <h2 id="alertMessage"></h2>
+  
+  <ul id="messageList"></ul>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script>
+    $(function () {
+      var socket = io();
+      $('#newRoom').click(function() {
+        $('#joinRoom').attr('style',"display:none");
+        $('#createRoom').attr('style',"display:block");
+      });
+      $('#existingRoom').click(function() {
+        $('#createRoom').attr('style',"display:none");
+        $('#joinRoom').attr('style',"display:block");
+      });
+      
+      $('#createRoom').submit(function(event) {
+        event.preventDefault();
+        
+        $('#newRoom').attr('disabled',true);
+        $('#existingRoom').attr('disabled',true);
+        $('#createRoomSubmit').attr('disabled',true);
+
+        var req = $.post( '/api/rooms', {} );
+        req.done(function( data ) {
+          $('#alertMessage').text('New chat room ID: ' + Object.keys(data)[0]);
+        });
+      });
+      
+      $('#joinRoom').submit(function(event) {
+        event.preventDefault();
+        
+        $('#newRoom').attr('disabled',true);
+        $('#existingRoom').attr('disabled',true);
+        
+        var url = '/api/rooms/' + $('#room').val();
+        var req = $.get( url, {} );
+        req.done(function( data ) {
+          if(data) {
+            var url = '/api/rooms/' + $('#room').val() + '/users';
+            console.log(url);
+            var req = $.post( url, { 'userId': $('#username').val() });
+            req.done(function( data ) {
+              if(data) {
+                $('#chatMessage').attr('style',"display:block");
+                $('#room').attr('disabled',true);
+                $('#username').attr('disabled',true);
+                $('#joinRoomSubmit').attr('disabled',true);
+                
+                socket.emit('join', { room: $('#room').val(),   // probably not the best practice to pull from the page again, should use API call eventually
+                                      username: $('#username').val(),
+                                    });
+              }
+              else {
+               $('#alertMessage').text('Username already taken in this room');
+              }
+            });
+          }
+          else {
+            $('#alertMessage').text('Invalid room ID');
+          }
+        });
+      });
+      
+      $('#chatMessage').submit(function(){
+        socket.emit('message', {  room: $('#room').val(),
+                                  username: $('#username').val(),
+                                  message: $('#message').val()
+                                });
+        
+        $('#message').val('');
+        return false;
+      });
+        
+      socket.on('broadcast', function(payload){
+        var message = payload.timeStamp + '    ' + payload.username;
+        if (payload.content) {
+          message += ': ' + payload.content;
+        }
+        else {
+          message += ': ' + payload.type;
+        }
+        $('#messageList').append($('<li>').text(message));
+      });
+    });
+  </script>
+</body>
+</html>

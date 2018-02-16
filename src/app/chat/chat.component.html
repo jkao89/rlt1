@@ -1,0 +1,58 @@
+<div class="chat-container d-flex flex-column">
+
+
+
+  <div class="d-flex flex-column align-items-stretch" style="height:100%;padding: 0em 2em 0 2em;">
+    <mat-card style="background:white;width:100%;">
+      <h2>Stuff here</h2>
+      <button class="btn btn-primary btn-sm" (click)="onJoin()">Join</button><br>
+    </mat-card>
+
+
+    <mat-card class="d-flex p-2" style="width:100%;margin-top:1em;background:lightgrey;color:#2196F3;">
+       <h5 style="color:#2196F3;"><strong>Currently chatting:</strong>
+         <span style="color:white;">xyz, abc, 123</span></h5>
+     </mat-card>
+
+      <mat-card id="chat-window" class="d-flex p-2">
+
+       <div style="width:100%;height:100%;overflow-y:scroll;" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+
+         <p *ngFor="let message of messages">
+           <span *ngIf="message.type == 'user-message'"><span class="text-muted" style="font-size:8px;"><em>{{message.timeStamp | date: 'shortTime'}}</em></span> <strong>{{message.username}}:</strong> {{message.content}}</span>
+           <span *ngIf="message.type == 'user-joined'" style="color:#2196F3;"><em><strong>{{message.username}}</strong> joined the room at {{message.timeStamp | date: 'shortTime'}}</em></span>
+           <span *ngIf="message.type == 'user-disconnect'" style="color:#2196F3;"><em><strong>{{message.username}}</strong> left the room at {{message.timeStamp | date: 'shortTime'}}</em></span>
+         </p>
+      </div>
+
+
+      </mat-card>
+
+
+      <mat-card id="chat-input" class="p-2">
+
+          <form #f="ngForm" (ngSubmit)="onSend(f.value.message); f.reset();">
+
+            <input ngModel
+                   name="message"
+                   #message="ngModel"
+                   class="form-control"
+                   type="text"
+                   placeholder="..."
+                   autocomplete="off">
+
+            <button hidden class="btn btn-success" type="submit">SEND</button>
+
+          </form>
+
+      </mat-card>
+  </div>
+
+
+
+
+
+
+
+
+</div>
