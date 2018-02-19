@@ -1,11 +1,13 @@
 import { Component, OnInit, Inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import  { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 import * as io from 'socket.io-client';
 
 import { ChatService } from './chat.service';
-
+import { AlertService } from '../alert.service';
 
 @Component({
   selector: 'app-chat',
@@ -14,52 +16,69 @@ import { ChatService } from './chat.service';
 })
 export class ChatComponent implements OnInit {
 
-  private socket;
-  url = 'http://18.217.240.92:8080';
-  name: String;
+  url = '/api/rooms/';
+
+  room: String;
+  users = [];
+  userCount;
+  username: String = '';
   messages = [];
 
-  constructor(public dialog: MatDialog) {
-    this.socket = io();
-    this.socket.on('broadcast', (content) => {
+  constructor( private _cs: ChatService,
+               private dialog: MatDialog,
+               private _route: ActivatedRoute,
+               private _router: Router,
+               private _http: HttpClient,
+               private _alert: AlertService
+  ) {
+    this._route.params.subscribe(params => {
 
-      //if (content.type == 'user-message') {
-        this.messages.push(content);
-      //}
+      this.room = params['room'];
+      this._http.get(this.url + this.room)
+        .subscribe(
+          (response) => {
+            this.messages = _cs.getMessages();
+            this.users = _cs.getUsers();
+            this.userCount = _cs.getUserCount();
+
+            let dialogRef = this.dialog.open(NameDialog, {
+             width: '250px',
+             disableClose: true
+           });
+
+           dialogRef.afterClosed().subscribe(result => {
+             this.username = result;
+             this._cs.setupChat({
+               username: this.username,
+               room: this.room
+             });
+             this._cs.join();
+           });
+          },
+          (error: HttpResponse<HttpErrorResponse>) => {
+            if (error.status == 404) {
+              this._alert.set('Oh no! That room doesn\'t exist.')
+              this._router.navigate(['/']);
+            }
+          }
+
+     );
 
     });
 
-    let dialogRef = this.dialog.open(NameDialog, {
-     width: '250px',
-     disableClose: true
-   });
-
-   dialogRef.afterClosed().subscribe(result => {
-     this.name = result;
-   });
 
   }
 
   ngOnInit() {
 
-
   }
 
   onSend(message) {
-    if (message) {
-      this.socket.emit('message', {
-        room: 'mikesTestRoom',
-        username: this.name,
-        message: message
-      });
-    }
+    this._cs.send(message);
   }
 
-  onJoin(){
-    this.socket.emit('join', {
-      room: 'mikesTestRoom',
-      username: this.name
-    });
+  onJoin() {
+
   }
 
 }
@@ -67,12 +86,12 @@ export class ChatComponent implements OnInit {
 @Component({
   selector: 'name-dialog',
   template: `
-  <h1 mat-dialog-title>Hi!</h1>
+  <h1 mat-dialog-title>Hello!</h1>
   <div mat-dialog-content>
     <p>Please enter a nickname:</p>
-    <form #f="ngForm" (ngSubmit)="onSubmit(f.value.name)">
+    <form #f="ngForm" (ngSubmit)="onSubmit(f.value.username)">
       <mat-form-field>
-        <input matInput placeholder="Name" name="name" [ngModel]="name" autocomplete="off" required>
+        <input matInput placeholder="Name" name="username" [ngModel]="username" autocomplete="off" required>
       </mat-form-field>
       <button class="btn btn-sm btn-success" type="submit" [disabled]="f.invalid">Join</button>
     </form>
@@ -83,8 +102,8 @@ export class NameDialog {
 
   constructor(public dialogRef: MatDialogRef<NameDialog>) { }
 
-  onSubmit(name) {
-    this.dialogRef.close(name);
+  onSubmit(username) {
+    this.dialogRef.close(username);
   }
 
 }

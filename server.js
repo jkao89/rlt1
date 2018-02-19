@@ -7,6 +7,7 @@ const server = http.createServer(app);
 const io = require('socket.io')(server);
 const api = require('./routes/api');
 const firebase = require('firebase');
+const cryptoRandomString = require('crypto-random-string');
 
 //  firebase setup
 var config = {
@@ -51,6 +52,9 @@ app.use('/test', api);
 app.get('/test', (req, res) => {
     res.sendFile(path.join(__dirname, 'test_chat.html'));
 });
+app.get('/test2', (req, res) => {
+    res.sendFile(path.join(__dirname, 'test_chat2.html'));
+});
 
 // Sample main page for making a new chat room
 app.get('/test_main', (req, res) => {
@@ -67,52 +71,83 @@ app.get('*', (req, res) => {
 
 // Catch socket connections over http server
 io.on('connection', function(socket){
-    console.log('User connected');
-
-    socket.on('join', function(payload){
-        console.log('User joined room ' + payload.room);
-        socket.join(payload.room);
-        socket.username = payload.username;
-        socket.room = payload.room;
-        console.log(socket.rooms);
-        let event = {
-            type: 'user-joined',
-            username: payload.username,
-            timeStamp: new Date()
-        };
-        io.to(payload.room).emit('broadcast', event);
-    });
-    
-    /* defunct for now
-    socket.on('message', function(payload){
-        let event = {
-            type: 'user-message',
-            username: payload.username,
-            content: payload.message,
-            timeStamp: new Date()
-        };
-        io.to(payload.room).emit('broadcast', event);
-    });*/
+    console.log('User connected to global socket');
     
     socket.on('event', function(payload){
-        
-        if (payload.type == 'user-joined') {
-            console.log('User joined room ' + payload.room);
-            socket.join(payload.room);
-            socket.username = payload.username;
-            socket.room = payload.room;
+        switch(payload.type) {
+            
+            case 'user-joined':
+                /*  payload = { type: 'user-join',
+                                room: string,
+                                username: string,   }
+                */
+                
+                // check if room exists in db
+                
+                //console.log('INSIDE JOIN');
+                //console.log(payload);
+                //console.log(socket.id);
+                // check if payload.username is unique in db
+                var user = dbHelper.addUser(payload.room, payload.username);
+                user.then((result) => {
+                    if (result) {
+                        // if yes, add the client socket to socket.room
+                        console.log('User joined room ' + payload.room);
+                        socket.join(payload.room);
+                        socket.username = payload.username;
+                        socket.room = payload.room;
+                        //console.log(socket.rooms);
+                        
+                        var room = dbHelper.getRoom(payload.room);
+                        room.then((result) => {
+                            if (result) {
+                                // if yes, add the room object to the payload
+                                payload.room_info = result;
+                                payload.room_info.users = Object.keys(result.users);
+                                payload.success = true;
+                                
+                                console.log(payload);
+                                
+                                // emit to all sockets in room
+                                io.to(payload.room).emit('event', payload);
+                            }
+                            else {
+                                // if no, add success:false, error:error_message to payload
+                                payload.success = false;
+                                payload.error = 'Room not found';
+                                
+                                // emit only to single client
+                                console.log(socket.id);
+                                io.to(socket.id).emit('event', payload);
+                            }
+                        });
+                    }
+                    else {
+                        // if no, add success:false, error:error_message to payload
+                        payload.success = false;
+                        payload.error = 'username already taken';
+                        
+                        // emit only to single client
+                        console.log(socket.id);
+                        io.to(socket.id).emit('event', payload);
+                    }
+                });
+                break;
+            
+            case 'user-message':
+                /*  payload = { type: 'user-message',
+                                room: string
+                                content: string }
+                */
+                
+                console.log(payload);
+                
+                // emit the entire payload to all sockets in room
+                io.to(payload.room).emit('event', payload);
+                break;
         }
-        
-        /*
-        let event = {
-            type: payload.type,
-            username: payload.username,
-            content: payload.message,
-        };*/
-        
-        io.to(payload.room).emit('event', payload);
-        
     });
+  
   
     socket.on('disconnect', function(){
         let event = {
@@ -120,11 +155,12 @@ io.on('connection', function(socket){
             username: socket.username,
             timeStamp: new Date()
         };
-        io.to(socket.room).emit('broadcast', event);
+        io.to(socket.room).emit('event', event);
         //console.log(socket);
         console.log('User disconnected');
+        // remove user from db
+        // if user count = 0, delete room
     });
-    
 });
 
 //Set Port

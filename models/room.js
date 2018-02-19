@@ -4,7 +4,7 @@ export class Room {
         this.id = roomId;
         this.created = timeStamp;
         this.userCount = 0;
-        this.users = {};
+        this.users = [];
     }
 }
 

@@ -4,7 +4,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { ChatComponent } from './chat.component';
 
 const routes: Routes = [
-  { path: 'chat', component: ChatComponent }
+  { path: 'chat', redirectTo: '/', pathMatch: 'full' },
+  { path: 'chat/:room', component: ChatComponent },
+  { path: '**', redirectTo: '/' }
 ];
 
 @NgModule({

@@ -7,11 +7,15 @@ module.exports = function(app) {
     dbHelper.getRoom = function(roomId) {
         var roomRef = database.ref('rooms/' + roomId);
         return roomRef.once('value').then(function(snapshot) {
-            return snapshot;
+            var roomObj = snapshot.val();
+            if (snapshot.val()) {
+                roomObj.id = roomId;
+            }
+            return roomObj;
         });
     };
     
-    // Converts a single room object returned from firebase to format below
+    // Converts a single room object when formatted as { "roomId" : { ... } }
     dbHelper.convertRoomObj = function(roomFB) {
         var roomId = Object.keys(roomFB)[0];
         return {
@@ -46,7 +50,7 @@ module.exports = function(app) {
         }).then(() => {
             return roomsRef.update(room);
         }).then(() => {
-            return room;
+            return dbHelper.convertRoomObj(room);
         }).catch(function(error) {
             console.log(error);
         });
@@ -63,14 +67,15 @@ module.exports = function(app) {
     
     // Adds user to the database
     dbHelper.addUser = function(roomId, userId) {
-        var roomRef = database.ref('rooms/' + roomId + '/userCount');
+        var countRef = database.ref('rooms/' + roomId + '/userCount');
+        var roomRef = database.ref('rooms/' + roomId);
         var usersRef = database.ref('rooms/' + roomId + '/users');
         var user = { [userId] : true };
-        // Check if user already exists
-        return usersRef.once('value')
+        // Check if room exists, then if user exists
+        return roomRef.once('value')
         .then((snapshot) => {
-            if (snapshot.hasChild(userId)) {    
-                return Promise.reject('user already exists');
+            if (snapshot.val() == null || snapshot.hasChild("users/" + userId)) {    
+                return Promise.reject('user already exists or room invalid');
             } else {
                 return Promise.resolve(user);
             }
@@ -78,7 +83,7 @@ module.exports = function(app) {
             return usersRef.update(user);
         // Increment user count
         }).then(() => {
-            return roomRef.transaction(function(currCount) {
+            return countRef.transaction(function(currCount) {
                 currCount++;
                 return currCount;
             });

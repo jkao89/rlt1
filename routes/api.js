@@ -14,20 +14,32 @@ router.use('/', function(req, res, next) {
 });
 
 
-// Returns single room, id parameter = room id
-// Success : code 200, returns room
-// Failure : code 404
+// Success : code 200, room exists
+// Failure : code 404, room does not exist
 router.get('/rooms/:id', function(req, res) {
   var room = dbHelper.getRoom(req.params.id);
   room.then((result) => {
     if (result) {
-      var roomObj = dbHelper.convertRoomObj(result);
-      res.status(200).json(roomObj);
+      res.status(200).send();
     } else {
       res.status(404).end();      // Room not found
     }
   });
 });
+
+
+// test route
+router.get('/rooms/obj/:id', function(req, res) {
+  var room = dbHelper.getRoom(req.params.id);
+  room.then((result) => {
+    if (result) {
+      res.status(200).json(result);
+    } else {
+      res.status(404).end();      // Room not found
+    }
+  });
+});
+
 
 // Delete single chatroom and all users and messages in it
 // Returns code 200
@@ -45,8 +57,7 @@ router.post('/rooms', function (req, res) {
   var room = dbHelper.createRoom(cryptoRandomString(20));
   room.then((result) => {
     if (result) {
-      var roomObj = dbHelper.convertRoomObj(result);
-      res.status(200).json(roomObj);
+      res.status(201).json(result);
     } else {
       res.status(400).end();
     }

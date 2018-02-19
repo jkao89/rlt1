@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 
 //import { AppRoutingModule } from './app-routing.module';
 import { HomeModule } from './home/home.module';
@@ -19,7 +20,13 @@ import { MatDialogModule } from '@angular/material';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
+import { SocketService } from './chat/socket.service';
+import { ChatService } from './chat/chat.service';
+
+import { AlertService } from './alert.service';
 import { AppComponent } from './app.component';
 
 @NgModule({
@@ -32,6 +39,7 @@ import { AppComponent } from './app.component';
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
     HttpModule,
     BrowserAnimationsModule,
     MatProgressSpinnerModule,
@@ -41,11 +49,16 @@ import { AppComponent } from './app.component';
     MatFormFieldModule,
     MatCardModule,
     MatDividerModule,
+    MatExpansionModule,
+    MatSnackBarModule,
     HomeModule,
     ChatModule,
     RouterModule.forRoot([])
   ],
-  providers: [],
+  providers: [
+
+    AlertService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

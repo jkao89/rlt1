@@ -1,5 +1,3 @@
-
-
 .center {
     display: inline-flex;
     align-items: center;
@@ -16,4 +14,9 @@
 
 .home-text {
   color: white;
+}
+
+ng-template[matExpansionPanelContent]#create {
+  display: none;
+  visibility: hidden;
 }

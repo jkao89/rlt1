@@ -38,7 +38,7 @@ import { ChatService } from './chat.service';
   ],
   providers: [
     SocketService,
-    ChatService
+    ChatService,
   ]
 })
 export class ChatModule { }
