@@ -12,6 +12,10 @@ import { MatDialogModule } from '@angular/material';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { MessagesComponent } from './messages/messages.component';
+import { InputComponent } from './input/input.component';
+
 import { NameDialog } from './chat.component';
 
 import { SocketService } from './socket.service';
@@ -25,16 +29,22 @@ import { ChatService } from './chat.service';
     ChatRoutingModule,
     MatFormFieldModule,
     MatInputModule,
-    MatDividerModule
+    MatDividerModule,
+    MatCardModule
   ],
   declarations: [
-    NameDialog
+    NameDialog,
+    SidebarComponent,
+    MessagesComponent,
+    InputComponent
   ],
   entryComponents: [
     NameDialog
   ],
   exports: [
-
+    SidebarComponent,
+    MessagesComponent,
+    InputComponent
   ],
   providers: [
     SocketService,

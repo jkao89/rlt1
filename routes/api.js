@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var database;
 var dbHelper;
 // var jwt = require('express-jwt');
 const cryptoRandomString = require('crypto-random-string');
@@ -8,7 +7,6 @@ const cryptoRandomString = require('crypto-random-string');
 
 // Stores firebase database reference in variable
 router.use('/', function(req, res, next) {
-  database = req.app.db;    // firebase database reference
   dbHelper = req.app.dbHelper;
   next();
 });
@@ -41,49 +39,68 @@ router.get('/rooms/obj/:id', function(req, res) {
 });
 
 
-// Delete single chatroom and all users and messages in it
-// Returns code 200
+// Delete chatroom and associated room object
+// Success: status 200, returns { 'success' : true }
+// Failure: status 500
 router.delete('/rooms/:id', function(req, res) {
   var room = dbHelper.deleteRoom(req.params.id);
   room.then((result) => {
-    res.status(200).json(result);
+    if (result) {
+      res.status(200).json(result);
+    } else {
+      res.status(500).end();
+    }
   });
 });
 
-// Create new room, returns room id and url
-// Success : code 200, returns room
-// Failure : code 400, room id already exists 
+// Creates new room
+// Success: status 201, returns room object
+// Failure: status 409, room id already exists 
 router.post('/rooms', function (req, res) {
   var room = dbHelper.createRoom(cryptoRandomString(20));
   room.then((result) => {
     if (result) {
       res.status(201).json(result);
     } else {
-      res.status(400).end();
+      res.status(409).end();
     }
   });
 });
 
-// Adds user to room, id parameter = room id
-// Success : status code 200, returns user count in snapshot property
-// Failure : status code 400, user id for room already exists
+// Adds user to room
+// Route parameter: room id
+// Expected body property: userId
+// Success: status 200, returns updated room object
+// Failure: status 404 or 409, returns { 'error' : '...' } 
 router.post('/rooms/:id/users', function (req, res) {
   var user = dbHelper.addUser(req.params.id, req.body.userId);
   user.then((result) => {
-    if (result) {
+    if (!result.error) {
       res.status(200).json(result);
     } else {
-      res.status(400).end();
+      if (result.error == 'room invalid') {
+        res.status(404).json(result);
+      } else if (result.error == 'user exists') {
+        res.status(409).json(result);
+      }
     }
   });
 });
 
 
-// Removes user from  user, id parameter = room id
+// Removes user from  room
+// Route parameters: room ID
+// Expected body property: userId
+// Success : status 200, returns updated room object
+// Failure : status 404, returns { 'error' : '...' } 
 router.delete('/rooms/:id/users', function (req, res) {
   var user = dbHelper.deleteUser(req.params.id, req.body.userId);
-  user.then(() => {
-    res.status(200).end();
+  user.then((result) => {
+    if (!result.error) {
+      res.status(200).json(result);
+    } else {
+      res.status(404).json(result);
+    }
   });
 });
 

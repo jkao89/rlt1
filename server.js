@@ -45,9 +45,6 @@ app.use('/api', api);
 // API location
 app.use('/test', api);
 
-/********************************************************************************
-****************** HERE LIES SAM'S CHAT TESTING BULLSHIT ( <-- LOL )*************
-********************************************************************************/
 // Send test requests to test file
 app.get('/test', (req, res) => {
     res.sendFile(path.join(__dirname, 'test_chat.html'));
@@ -60,9 +57,6 @@ app.get('/test2', (req, res) => {
 app.get('/test_main', (req, res) => {
     res.sendFile(path.join(__dirname, 'test_main.html'));
 });
-/********************************************************************************
-****************************** ALL SAFE NOW *************************************
-********************************************************************************/
 
 // Send all other requests to the Angular app
 app.get('*', (req, res) => {
@@ -77,20 +71,15 @@ io.on('connection', function(socket){
         switch(payload.type) {
             
             case 'user-joined':
-                /*  payload = { type: 'user-join',
+                /*  payload = { type: 'user-joined',
                                 room: string,
                                 username: string,   }
                 */
                 
-                // check if room exists in db
-                
-                //console.log('INSIDE JOIN');
-                //console.log(payload);
-                //console.log(socket.id);
                 // check if payload.username is unique in db
                 var user = dbHelper.addUser(payload.room, payload.username);
                 user.then((result) => {
-                    if (result) {
+                    if (!result.error) {    // Sam : I changed this from 'result'
                         // if yes, add the client socket to socket.room
                         console.log('User joined room ' + payload.room);
                         socket.join(payload.room);
@@ -98,39 +87,59 @@ io.on('connection', function(socket){
                         socket.room = payload.room;
                         //console.log(socket.rooms);
                         
-                        var room = dbHelper.getRoom(payload.room);
-                        room.then((result) => {
-                            if (result) {
-                                // if yes, add the room object to the payload
-                                payload.room_info = result;
-                                payload.room_info.users = Object.keys(result.users);
-                                payload.success = true;
-                                
-                                console.log(payload);
-                                
-                                // emit to all sockets in room
-                                io.to(payload.room).emit('event', payload);
-                            }
-                            else {
-                                // if no, add success:false, error:error_message to payload
-                                payload.success = false;
-                                payload.error = 'Room not found';
-                                
-                                // emit only to single client
-                                console.log(socket.id);
-                                io.to(socket.id).emit('event', payload);
-                            }
-                        });
-                    }
-                    else {
-                        // if no, add success:false, error:error_message to payload
-                        payload.success = false;
-                        payload.error = 'username already taken';
-                        
+                        payload.room_info = result;
+                        payload.room_info.users = Object.keys(result.users);
+                        payload.success = true;
+                        console.log(payload);
+                         // emit to all sockets in room
+                        io.to(payload.room).emit('event', payload);
+                    } else {
+                        if (result.error == 'room invalid') {
+                            // if no, add success:false, error:error_message to payload
+                            payload.success = false;
+                            payload.error = 'Room not found';
+                        } else if (result.error == 'user exists') {
+                            payload.success = false;
+                            payload.error = 'User already exists';
+                        }
                         // emit only to single client
-                        console.log(socket.id);
-                        io.to(socket.id).emit('event', payload);
+                            console.log(socket.id);
+                            io.to(socket.id).emit('event', payload);
                     }
+                        
+                        // var room = dbHelper.getRoom(payload.room);
+                        // room.then((result) => {
+                        //     if (result) {
+                        //         // if yes, add the room object to the payload
+                        //         payload.room_info = result;
+                        //         payload.room_info.users = Object.keys(result.users);
+                        //         payload.success = true;
+                                
+                        //         console.log(payload);
+                                
+                        //         // emit to all sockets in room
+                        //         io.to(payload.room).emit('event', payload);
+                        //     }
+                        //     else {
+                        //         // if no, add success:false, error:error_message to payload
+                        //         payload.success = false;
+                        //         payload.error = 'Room not found';
+                                
+                        //         // emit only to single client
+                        //         console.log(socket.id);
+                        //         io.to(socket.id).emit('event', payload);
+                        //     }
+                        //});
+                    // }
+                    // else {
+                    //     // if no, add success:false, error:error_message to payload
+                    //     payload.success = false;
+                    //     payload.error = 'username already taken';
+                        
+                    //     // emit only to single client
+                    //     console.log(socket.id);
+                    //     io.to(socket.id).emit('event', payload);
+                    // }
                 });
                 break;
             
@@ -156,10 +165,22 @@ io.on('connection', function(socket){
             timeStamp: new Date()
         };
         io.to(socket.room).emit('event', event);
-        //console.log(socket);
         console.log('User disconnected');
+        
         // remove user from db
-        // if user count = 0, delete room
+        var userDeleted = dbHelper.deleteUser(socket.room, socket.username);
+        userDeleted.then((result) => {
+            if (!result.error) {
+                // delete room if all users have left
+                if (result.userCount < 1) {
+                    dbHelper.deleteRoom(socket.room);
+                }
+            }
+            else {
+                console.log("Error removing user " + socket.username + " from room " + socket.room);
+                console.log("Error message: " + result.error);
+            }
+        });
     });
 });
 

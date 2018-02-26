@@ -6,12 +6,13 @@ import { RouterModule } from '@angular/router'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 
-//import { AppRoutingModule } from './app-routing.module';
 import { HomeModule } from './home/home.module';
 import { HomeComponent } from './home/home.component';
 
 import { ChatModule } from './chat/chat.module';
 import { ChatComponent } from './chat/chat.component';
+
+import { HeaderComponent } from './header/header.component';
 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
@@ -33,7 +34,8 @@ import { AppComponent } from './app.component';
   declarations: [
     AppComponent,
     HomeComponent,
-    ChatComponent
+    ChatComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +58,6 @@ import { AppComponent } from './app.component';
     RouterModule.forRoot([])
   ],
   providers: [
-
     AlertService
   ],
   bootstrap: [AppComponent]

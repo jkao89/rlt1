@@ -1,26 +1,29 @@
-<div class="d-flex flex-column" style="position:fixed;top: 0; left: 0; width: 100%; height: 100%;justify-content:center;align-items:center;">
+<div class="d-flex flex-column" style="background-color:lightgray;position:fixed;top: 0; left: 0; width: 100%; height: 100%;justify-content:center;align-items:center;">
 
-  <h1 style="margin:0 auto;margin-bottom:1em;"><strong>Welcome To Chit Chat!</strong></h1>
+  <div style="position:fixed;top:0;width:100%;">
+      <app-header></app-header>
+  </div>
 
+<div class="mat-elevation-z6" style="width:75%;text-align:center;margin-top:-100px;">
   <mat-accordion>
 
-    <mat-expansion-panel  [hideToggle]="true">
+    <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-        <mat-icon style="margin-right:10px;">person_outline</mat-icon>
+        <mat-icon class="text-primary" style="margin-right:10px;">person_outline</mat-icon>
         Create A New Room
         </mat-panel-title>
         <mat-panel-description>
       </mat-panel-description>
       </mat-expansion-panel-header>
-      <button class="btn btn-sm btn-primary" (click)="onCreate()">Public</button>
-      <button class="btn btn-sm btn-secondary" disabled>Private</button>
+      <button class="btn btn-primary" (click)="onCreate()">Public</button>
+      <button class="btn btn-secondary" disabled>Private</button>
     </mat-expansion-panel>
 
-    <mat-expansion-panel [hideToggle]="true">
+    <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          <mat-icon style="margin-right:10px;">group_add</mat-icon>
+          <mat-icon class="text-primary" style="margin-right:10px;">group_add</mat-icon>
           Join A Chat
         </mat-panel-title>
         <mat-panel-description>
@@ -28,22 +31,23 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
       <form (ngSubmit)="onJoin(f.value.room)" #f=ngForm>
-        <mat-form-field>
+        <mat-form-field style="width:60%;">
           <input matInput placeholder="Room"
+                          class="form-control form-control-lg"
                           ngModel
                           #room="ngModel"
                           name="room"
                           required>
         </mat-form-field>
-        <button type="submit" class="btn btn-sm btn-primary" [disabled]="f.invalid">Join</button>
+        <button type="submit" class="btn btn-primary" [disabled]="f.invalid">Join</button>
       </form>
 
     </mat-expansion-panel>
 
-    <mat-expansion-panel [hideToggle]="true">
+    <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          <mat-icon style="margin-right:10px;">question_answer</mat-icon>
+          <mat-icon class="text-primary" style="margin-right:10px;">question_answer</mat-icon>
           F.A.Q.
         </mat-panel-title>
         <mat-panel-description>
@@ -61,5 +65,7 @@
     </mat-expansion-panel>
 
   </mat-accordion>
+</div>
+
 
 </div>

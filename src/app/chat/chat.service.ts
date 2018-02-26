@@ -9,8 +9,12 @@ export class ChatService {
   username: String   = "";
   room:     String   = "";
   users = [];
-  userCount;
+  userCount = 0;
   messages = [];
+
+  private _userCount = new Subject<any>();
+  private _users = new Subject<any>();
+  private _messages = new Subject<any>();
 
   constructor(private _ss: SocketService, private _route: ActivatedRoute) {
 
@@ -21,18 +25,44 @@ export class ChatService {
   }
 
   handleResponse (response) {
-    if (response.type == 'user-joined') {
-      response.room_info.users.forEach( user => {
-        this.users.push(user)
-      });
-      this.userCount = this.users.length;
+
+    switch (response.type) {
+
+      case 'user-joined':
+        this.users = [];
+        this.userCount = 0;
+        response.room_info.users.forEach( user => {
+          this.users.push(user);
+          this.userCount++;
+        });
+        this._userCount.next(this.userCount);
+        this._users.next(this.users);
+        this.messages.push(response);
+        this._messages.next(this.messages);
+        break;
+      case 'user-disconnect':
+      console.log('REMOVING: ');
+      console.log(this.users[this.users.indexOf(response.username)]);
+          this.users.splice(this.users.indexOf(response.username), 1);
+          this.userCount--;
+          this._userCount.next(this.userCount);
+          this._users.next(this.users);
+          this.messages.push(response);
+          this._messages.next(this.messages);
+          break;
+      case 'user-message':
+        this.messages.push(response);
+        this._messages.next(this.messages);
+        break;
+      default:
+
     }
-    this.messages.push(response);
+
   }
 
   event (type, content?) {
     return {
-      type      : type    || null,
+      type      : type,
       content   : content || null,
       room      : this.room,
       username  : this.username,
@@ -62,13 +92,13 @@ export class ChatService {
   }
 
   getUsers () {
-    return this.users;
+    return this._users.asObservable();
   }
   getUserCount () {
-    return this.userCount;
+    return this._userCount.asObservable();
   }
-  getMessages (): String[] {
-    return this.messages;
+  getMessages () {
+    return this._messages.asObservable();
   }
 
 }

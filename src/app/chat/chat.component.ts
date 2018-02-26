@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { AsyncPipe } from '@angular/common';
 
 import  { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
@@ -19,10 +20,7 @@ export class ChatComponent implements OnInit {
   url = '/api/rooms/';
 
   room: String;
-  users = [];
-  userCount;
   username: String = '';
-  messages = [];
 
   constructor( private _cs: ChatService,
                private dialog: MatDialog,
@@ -37,9 +35,6 @@ export class ChatComponent implements OnInit {
       this._http.get(this.url + this.room)
         .subscribe(
           (response) => {
-            this.messages = _cs.getMessages();
-            this.users = _cs.getUsers();
-            this.userCount = _cs.getUserCount();
 
             let dialogRef = this.dialog.open(NameDialog, {
              width: '250px',
@@ -54,6 +49,7 @@ export class ChatComponent implements OnInit {
              });
              this._cs.join();
            });
+
           },
           (error: HttpResponse<HttpErrorResponse>) => {
             if (error.status == 404) {
@@ -69,17 +65,15 @@ export class ChatComponent implements OnInit {
 
   }
 
+
   ngOnInit() {
 
-  }
-
-  onSend(message) {
-    this._cs.send(message);
   }
 
   onJoin() {
 
   }
+
 
 }
 

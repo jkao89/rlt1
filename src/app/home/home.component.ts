@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { MainComponent } from './main/main.component';
-import { FaqComponent } from './faq/faq.component';
 import { ChatService } from '../chat/chat.service';
 import { AlertService } from '../alert.service';
 
@@ -28,8 +26,6 @@ export class HomeComponent implements OnInit {
   onCreate () {
     this._http.post(this.url, null)
       .subscribe( response => {
-        //console.log(result)
-        //this._cs.setRoom(result['id']);
         this._router.navigate(['chat', response['id']]);
       });
   }

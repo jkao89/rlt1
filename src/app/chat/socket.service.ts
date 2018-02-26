@@ -8,12 +8,12 @@ import * as io from 'socket.io-client';
 export class SocketService {
 
   private _socket;
-  private _server = 'http://18.219.143.176:8080';
+  private _server = 'http://18.219.102.107:8080';
   private _response = new Subject<any>();
 
-  constructor() {
-    this._socket = io();
+  constructor () {
 
+    this._socket = io();
     this._socket.on('event', data => {
       this._response.next(data);
     });
@@ -21,11 +21,15 @@ export class SocketService {
   }
 
   send (payload) {
+
     this._socket.emit('event', payload);
+
   }
 
   response () {
+
     return this._response.asObservable();
+
   }
 
 }

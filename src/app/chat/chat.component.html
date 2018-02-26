@@ -1,59 +1,33 @@
 <div class="chat-container d-flex flex-column" *ngIf="username">
 
+  <app-header></app-header>
+
   <div class="d-flex flex-column align-items-stretch" style="height:100%;">
 
-    <div class="d-flex flex-row align-items-stretch" style="height:100%;width:100%;">
+    <div class="d-flex flex-row align-items-stretch" style="height:95%;width:100%;">
+      <mat-card class="d-flex flex-column align-items-between justify-content-between mat-elevation-z6" style="background:white;width:25%;height:100%;margin:20px;">
 
-    <mat-card class="d-flex flex-column align-items-between justify-content-between" style="background:white;width:25%;height:100%;">
-
-      <div class="d-flex flex-column">
-        <h4 style="margin: 0 auto;">Connected<span class="badge badge-pill badge-primary" style="margin-left:10px;">3</span></h4>
-
-        <ul style="border-top: 1px solid lightgrey;margin-top:10px;" *ngIf="users">
-          <div style="margin-top:10px;">
-            <li *ngFor="let user of users">{{user}}</li>
-          </div>
-        </ul>
-      </div>
-
-      <div class="d-flex flex-column" style="border-top: 1px solid lightgrey;">
-        <h2 style="margin: 10px auto;">Options</h2>
-        <button class="btn btn-primary btn-sm" (click)="onJoin()">Join</button><br>
-      </div>
-
-    </mat-card>
-
-      <mat-card id="chat-window" class="d-flex p-2">
-
-       <div id="messages" #scrollMe [scrollTop]="scrollMe.scrollHeight">
-
-         <p *ngFor="let message of messages">
-           <span *ngIf="message.type == 'user-message'"><span class="text-muted" style="font-size:8px;margin-right:3px;"><em>{{message.timeStamp | date: 'shortTime'}}</em></span> <strong>{{message.username}}:</strong> {{message.content}}</span>
-           <span *ngIf="message.type == 'user-joined'" style="color:#2196F3;"><em><strong>{{message.username}}</strong> joined the room at {{message.timeStamp | date: 'shortTime'}}</em></span>
-           <span *ngIf="message.type == 'user-disconnect'" style="color:#2196F3;"><em><strong>{{message.username}}</strong> left the room at {{message.timeStamp | date: 'shortTime'}}</em></span>
-         </p>
-      </div>
+        <app-sidebar></app-sidebar>
 
       </mat-card>
+
+      <mat-card id="chat-window" class="d-flex p-2 flex-column mat-elevation-z6" style="margin:20px;margin-left: 0;">
+      <div id="messages" #scrollMe [scrollTop]="scrollMe.scrollHeight" style="display:block;">
+
+        <app-messages></app-messages>
+
+      </div>
+
+
+      <div class="" style="display:block;padding:10px;text-align:center;border-top: 1px solid lightgrey;">
+
+       <app-input></app-input>
+
+      </div>
+      </mat-card>
+
     </div>
 
-      <mat-card id="chat-input" class="p-2">
-
-          <form #f="ngForm" (ngSubmit)="onSend(f.value.message); f.reset();">
-
-            <input ngModel
-                   name="message"
-                   #message="ngModel"
-                   class="form-control"
-                   type="text"
-                   placeholder="Type here..."
-                   autocomplete="off">
-
-            <button hidden class="btn btn-primary" type="submit">SEND</button>
-
-          </form>
-
-      </mat-card>
   </div>
 
 </div>
