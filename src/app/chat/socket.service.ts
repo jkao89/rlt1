@@ -8,7 +8,6 @@ import * as io from 'socket.io-client';
 export class SocketService {
 
   private _socket;
-  private _server = 'http://18.219.102.107:8080';
   private _response = new Subject<any>();
 
   constructor () {

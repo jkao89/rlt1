@@ -40,9 +40,8 @@ export class ChatService {
         this.messages.push(response);
         this._messages.next(this.messages);
         break;
+
       case 'user-disconnect':
-      console.log('REMOVING: ');
-      console.log(this.users[this.users.indexOf(response.username)]);
           this.users.splice(this.users.indexOf(response.username), 1);
           this.userCount--;
           this._userCount.next(this.userCount);
@@ -50,12 +49,14 @@ export class ChatService {
           this.messages.push(response);
           this._messages.next(this.messages);
           break;
+
       case 'user-message':
         this.messages.push(response);
         this._messages.next(this.messages);
         break;
-      default:
 
+      default:
+        break;
     }
 
   }

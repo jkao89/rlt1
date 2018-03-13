@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import { ChatService } from '../chat/chat.service';
@@ -16,9 +16,9 @@ export class HomeComponent implements OnInit {
                private _cs: ChatService,
                private _router: Router,
                private _alert: AlertService
-             ) { this._alert.check(); }
+             ) { }
 
-  url = "/api/rooms";
+  url = "/api/rooms/";
 
   ngOnInit() {
   }
@@ -31,7 +31,17 @@ export class HomeComponent implements OnInit {
   }
 
   onJoin (room: String) {
-    this._router.navigate(['chat', room]);
+    this._http.get(this.url + room)
+      .subscribe(
+        (response) => {
+          this._router.navigate(['chat', room]);
+        },
+        (error: HttpResponse<HttpErrorResponse>) => {
+          if (error.status == 404) {
+            this._alert.alert('Oh no! That room doesn\'t exist.');
+          }
+        }
+      );
   }
 
 }

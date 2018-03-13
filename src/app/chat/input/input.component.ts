@@ -15,7 +15,9 @@ export class InputComponent implements OnInit {
   }
 
   onSend(message) {
-    this._cs.send(message);
+    if (message !== null && !message.match(/^\s*$/)) {
+      this._cs.send(message);
+    }
   }
 
 }

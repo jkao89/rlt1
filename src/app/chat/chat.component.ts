@@ -1,9 +1,9 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, AfterViewInit, Inject, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { AsyncPipe } from '@angular/common';
-
-import  { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Observable } from 'rxjs/Rx';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 import * as io from 'socket.io-client';
 
@@ -15,12 +15,15 @@ import { AlertService } from '../alert.service';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements AfterViewInit {
 
+  @ViewChild('messagesScroll') scroll: ElementRef;
+  @ViewChildren('messages') messagesEl: QueryList<any>;
   url = '/api/rooms/';
-
   room: String;
   username: String = '';
+  messages: Observable<any>;
+
 
   constructor( private _cs: ChatService,
                private dialog: MatDialog,
@@ -29,16 +32,17 @@ export class ChatComponent implements OnInit {
                private _http: HttpClient,
                private _alert: AlertService
   ) {
+
     this._route.params.subscribe(params => {
 
       this.room = params['room'];
       this._http.get(this.url + this.room)
         .subscribe(
           (response) => {
-
             let dialogRef = this.dialog.open(NameDialog, {
              width: '250px',
-             disableClose: true
+             disableClose: true,
+             data: { room: this.room }
            });
 
            dialogRef.afterClosed().subscribe(result => {
@@ -48,12 +52,12 @@ export class ChatComponent implements OnInit {
                room: this.room
              });
              this._cs.join();
+             this.messages = this._cs.getMessages();
            });
 
           },
           (error: HttpResponse<HttpErrorResponse>) => {
             if (error.status == 404) {
-              this._alert.set('Oh no! That room doesn\'t exist.')
               this._router.navigate(['/']);
             }
           }
@@ -62,18 +66,15 @@ export class ChatComponent implements OnInit {
 
     });
 
-
   }
 
-
-  ngOnInit() {
-
+  ngAfterViewInit () {
+    this.messagesEl.changes.subscribe(
+      (change) => {
+        this.scroll.nativeElement.scrollTop = this.scroll.nativeElement.scrollHeight;
+      }
+    );
   }
-
-  onJoin() {
-
-  }
-
 
 }
 
@@ -94,10 +95,33 @@ export class ChatComponent implements OnInit {
 })
 export class NameDialog {
 
-  constructor(public dialogRef: MatDialogRef<NameDialog>) { }
+  constructor(public dialogRef: MatDialogRef<NameDialog>,
+              private _http: HttpClient,
+              private _route: ActivatedRoute,
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              private _alert: AlertService) { }
+
+  url = '/api/rooms/obj/';
+  unique = true;
 
   onSubmit(username) {
-    this.dialogRef.close(username);
+    if (username === null || username.match(/^\s*$/)) {
+      this._alert.alert('Please enter a valid username.')
+    }
+    else {
+      this._http.get(this.url + this.data.room)
+      .subscribe(
+        (response) => {
+          console.log(response);
+          if (response['userCount'] > 0 && response['users'].hasOwnProperty(username)) {
+            this._alert.alert('Sorry, that name is taken.')
+          }
+          else {
+            this.dialogRef.close(username);
+          }
+         });
+    }
+    
   }
 
 }

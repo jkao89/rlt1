@@ -38,28 +38,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var AlertService = /** @class */ (function () {
     function AlertService(snackbar) {
         this.snackbar = snackbar;
-        this.isAlert = false;
-        this.alertMessage = '';
     }
-    AlertService.prototype.alert = function () {
-        this.snackbar.open(this.alertMessage, 'X', {
-            duration: 10000,
+    AlertService.prototype.alert = function (message) {
+        this.snackbar.open(message, 'X', {
+            duration: 2000,
         });
-    };
-    AlertService.prototype.set = function (message) {
-        this.alertMessage = message;
-        this.isAlert = true;
-    };
-    AlertService.prototype.check = function () {
-        if (this.isAlert) {
-            this.alert();
-            this.isAlert = false;
-            this.alertMessage = '';
-        }
     };
     AlertService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["C" /* Injectable */])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_material__["d" /* MatSnackBar */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_material__["e" /* MatSnackBar */]])
     ], AlertService);
     return AlertService;
 }());
@@ -141,20 +128,20 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_platform_browser_animations__ = __webpack_require__("../../../platform-browser/esm5/animations.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__home_home_module__ = __webpack_require__("../../../../../src/app/home/home.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__home_home_component__ = __webpack_require__("../../../../../src/app/home/home.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__chat_chat_module__ = __webpack_require__("../../../../../src/app/chat/chat.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__chat_chat_component__ = __webpack_require__("../../../../../src/app/chat/chat.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__header_header_component__ = __webpack_require__("../../../../../src/app/header/header.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__angular_material_progress_spinner__ = __webpack_require__("../../../material/esm5/progress-spinner.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__angular_material_icon__ = __webpack_require__("../../../material/esm5/icon.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__angular_material_input__ = __webpack_require__("../../../material/esm5/input.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__angular_material__ = __webpack_require__("../../../material/esm5/material.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__angular_material_form_field__ = __webpack_require__("../../../material/esm5/form-field.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__angular_material_card__ = __webpack_require__("../../../material/esm5/card.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__angular_material_divider__ = __webpack_require__("../../../material/esm5/divider.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__angular_material_expansion__ = __webpack_require__("../../../material/esm5/expansion.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__angular_material_snack_bar__ = __webpack_require__("../../../material/esm5/snack-bar.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_material_progress_spinner__ = __webpack_require__("../../../material/esm5/progress-spinner.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__angular_material_icon__ = __webpack_require__("../../../material/esm5/icon.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_material_input__ = __webpack_require__("../../../material/esm5/input.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__angular_material__ = __webpack_require__("../../../material/esm5/material.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__angular_material_form_field__ = __webpack_require__("../../../material/esm5/form-field.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__angular_material_card__ = __webpack_require__("../../../material/esm5/card.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__angular_material_divider__ = __webpack_require__("../../../material/esm5/divider.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__angular_material_expansion__ = __webpack_require__("../../../material/esm5/expansion.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__angular_material_snack_bar__ = __webpack_require__("../../../material/esm5/snack-bar.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__home_home_module__ = __webpack_require__("../../../../../src/app/home/home.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__home_home_component__ = __webpack_require__("../../../../../src/app/home/home.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__chat_chat_module__ = __webpack_require__("../../../../../src/app/chat/chat.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__chat_chat_component__ = __webpack_require__("../../../../../src/app/chat/chat.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__header_header_component__ = __webpack_require__("../../../../../src/app/header/header.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__alert_service__ = __webpack_require__("../../../../../src/app/alert.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -193,9 +180,9 @@ var AppModule = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["K" /* NgModule */])({
             declarations: [
                 __WEBPACK_IMPORTED_MODULE_22__app_component__["a" /* AppComponent */],
-                __WEBPACK_IMPORTED_MODULE_8__home_home_component__["a" /* HomeComponent */],
-                __WEBPACK_IMPORTED_MODULE_10__chat_chat_component__["a" /* ChatComponent */],
-                __WEBPACK_IMPORTED_MODULE_11__header_header_component__["a" /* HeaderComponent */]
+                __WEBPACK_IMPORTED_MODULE_17__home_home_component__["a" /* HomeComponent */],
+                __WEBPACK_IMPORTED_MODULE_19__chat_chat_component__["a" /* ChatComponent */],
+                __WEBPACK_IMPORTED_MODULE_20__header_header_component__["a" /* HeaderComponent */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
@@ -204,17 +191,17 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_6__angular_common_http__["b" /* HttpClientModule */],
                 __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* HttpModule */],
                 __WEBPACK_IMPORTED_MODULE_5__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
-                __WEBPACK_IMPORTED_MODULE_12__angular_material_progress_spinner__["a" /* MatProgressSpinnerModule */],
-                __WEBPACK_IMPORTED_MODULE_13__angular_material_icon__["a" /* MatIconModule */],
-                __WEBPACK_IMPORTED_MODULE_14__angular_material_input__["b" /* MatInputModule */],
-                __WEBPACK_IMPORTED_MODULE_15__angular_material__["b" /* MatDialogModule */],
-                __WEBPACK_IMPORTED_MODULE_16__angular_material_form_field__["c" /* MatFormFieldModule */],
-                __WEBPACK_IMPORTED_MODULE_17__angular_material_card__["a" /* MatCardModule */],
-                __WEBPACK_IMPORTED_MODULE_18__angular_material_divider__["a" /* MatDividerModule */],
-                __WEBPACK_IMPORTED_MODULE_19__angular_material_expansion__["a" /* MatExpansionModule */],
-                __WEBPACK_IMPORTED_MODULE_20__angular_material_snack_bar__["b" /* MatSnackBarModule */],
-                __WEBPACK_IMPORTED_MODULE_7__home_home_module__["a" /* HomeModule */],
-                __WEBPACK_IMPORTED_MODULE_9__chat_chat_module__["a" /* ChatModule */],
+                __WEBPACK_IMPORTED_MODULE_7__angular_material_progress_spinner__["a" /* MatProgressSpinnerModule */],
+                __WEBPACK_IMPORTED_MODULE_8__angular_material_icon__["a" /* MatIconModule */],
+                __WEBPACK_IMPORTED_MODULE_9__angular_material_input__["b" /* MatInputModule */],
+                __WEBPACK_IMPORTED_MODULE_10__angular_material__["c" /* MatDialogModule */],
+                __WEBPACK_IMPORTED_MODULE_11__angular_material_form_field__["c" /* MatFormFieldModule */],
+                __WEBPACK_IMPORTED_MODULE_12__angular_material_card__["a" /* MatCardModule */],
+                __WEBPACK_IMPORTED_MODULE_13__angular_material_divider__["a" /* MatDividerModule */],
+                __WEBPACK_IMPORTED_MODULE_14__angular_material_expansion__["a" /* MatExpansionModule */],
+                __WEBPACK_IMPORTED_MODULE_15__angular_material_snack_bar__["b" /* MatSnackBarModule */],
+                __WEBPACK_IMPORTED_MODULE_16__home_home_module__["a" /* HomeModule */],
+                __WEBPACK_IMPORTED_MODULE_18__chat_chat_module__["a" /* ChatModule */],
                 __WEBPACK_IMPORTED_MODULE_4__angular_router__["c" /* RouterModule */].forRoot([])
             ],
             providers: [
@@ -271,12 +258,13 @@ var ChatRoutingModule = /** @class */ (function () {
 /***/ "../../../../../src/app/chat/chat.component.css":
 /***/ (function(module, exports, __webpack_require__) {
 
+var escape = __webpack_require__("../../../../css-loader/lib/url/escape.js");
 exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
 // imports
 
 
 // module
-exports.push([module.i, "div.chat-container {\n\n  background: lightgrey; /*#2196F3;*/\n  position:fixed;\n  width: 100%;\n  height: 100%;\n  /*padding: 0em 5em 0 5em;*/\n}\n\n#chat-window {\n  height:100%;\n  width: 100%;\n  /*margin-top: 15px;*/\n  padding: 2em 5em 2em 5em;\n}\n\n#chat-input {\n  background: #DDDDDD;\n  text-align: center;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  vertical-align: middle;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  height: 6em;\n  width: 100%;\n}\n\n#messages {\n  width:100%;\n  height:100%;\n  overflow-y:scroll;\n  padding: 2em;\n  padding-bottom: 0;\n  border-radius: 15px;\n}\n\n#chat-input-wrapper {\n  margin: 0 auto;\n  text-align: center;\n  border: 2px solid darkgrey;\n  border-radius: 15px;\n  height: 70px;\n  background: white;\n  width: 90%;\n  display: -webkit-inline-box;\n  display: -ms-inline-flexbox;\n  display: inline-flex;\n  -webkit-box-shadow: 0px 0px 10px rgba(0,0,0,0.2);\n          box-shadow: 0px 0px 10px rgba(0,0,0,0.2);\n}\n\ninput[type=\"text\"] {\n  margin: 0 auto;\n  width: 95%;\n  display: -webkit-inline-box;\n  display: -ms-inline-flexbox;\n  display: inline-flex;\n  background: white;\n  border: 2px solid #2196F3;\n  border-radius: 15px;\n  padding: 1em;\n}\n\ninput[type=\"text\"]:focus {\n  border: 3px solid #2196F3;\n  -webkit-box-shadow: none;\n          box-shadow: none;\n}\n\nbutton {\n  display: -webkit-inline-box;\n  display: -ms-inline-flexbox;\n  display: inline-flex;\n}\n\nbutton[type=\"submit\"] {\n  margin-left: 5px;\n}\n", ""]);
+exports.push([module.i, "div.chat-container {\n  position:fixed;\n  width: 100%;\n  height: 100%;\n}\n\n.bg {\n  background: url(" + escape(__webpack_require__("../../../../../src/assets/img/bg.jpg")) + ") no-repeat center center fixed;\n  background-size: cover;\n}\n\n#sidebar {\n  opacity: .93;\n  background: white;\n  width: 25%;\n  height: 100%;\n  margin: 20px;\n}\n\n#main-window {\n  height:100%;\n  width: 100%;\n  padding: 2em 5em 2em 5em;\n  opacity: .93;\n  margin: 20px;\n  margin-left: 0;\n}\n\n#chat-input {\n  display: block;\n  padding: 10px;\n  text-align: center;\n  border-top: 1px solid lightgrey;\n}\n\n#messages {\n  width:100%;\n  height:100%;\n  overflow-y: scroll;\n  padding: 2em;\n  padding-bottom: 0;\n  display: block;\n  border-top: 1px solid lightgrey;\n  margin-top: 10px;\n}\n\ninput[type=\"text\"] {\n  margin: 0 auto;\n  width: 95%;\n  display: -webkit-inline-box;\n  display: -ms-inline-flexbox;\n  display: inline-flex;\n  background: white;\n  border: 2px solid lightgrey;\n  border-radius: 15px;\n  padding: 1em;\n}\n\ninput[type=\"text\"]:focus {\n  border: 2px solid #2196F3;\n  -webkit-box-shadow: none;\n          box-shadow: none;\n}\n\nbutton {\n  display: -webkit-inline-box;\n  display: -ms-inline-flexbox;\n  display: inline-flex;\n}\n\nbutton[type=\"submit\"] {\n  margin-left: 5px;\n}\n", ""]);
 
 // exports
 
@@ -289,7 +277,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/chat/chat.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"chat-container d-flex flex-column\" *ngIf=\"username\">\n\n  <app-header></app-header>\n\n  <div class=\"d-flex flex-column align-items-stretch\" style=\"height:100%;\">\n\n    <div class=\"d-flex flex-row align-items-stretch\" style=\"height:95%;width:100%;\">\n      <mat-card class=\"d-flex flex-column align-items-between justify-content-between mat-elevation-z6\" style=\"background:white;width:25%;height:100%;margin:20px;\">\n\n        <app-sidebar></app-sidebar>\n\n      </mat-card>\n\n      <mat-card id=\"chat-window\" class=\"d-flex p-2 flex-column mat-elevation-z6\" style=\"margin:20px;margin-left: 0;\">\n      <div id=\"messages\" #scrollMe [scrollTop]=\"scrollMe.scrollHeight\" style=\"display:block;\">\n\n        <app-messages></app-messages>\n\n      </div>\n\n\n      <div class=\"\" style=\"display:block;padding:10px;text-align:center;border-top: 1px solid lightgrey;\">\n\n       <app-input></app-input>\n\n      </div>\n      </mat-card>\n\n    </div>\n\n  </div>\n\n</div>\n"
+module.exports = "<div class=\"chat-container d-flex flex-column bg\" *ngIf=\"username\">\n\n  <app-header></app-header>\n\n  <div class=\"d-flex flex-column align-items-stretch\" style=\"height:100%;\">\n\n    <div class=\"d-flex flex-row align-items-stretch\" style=\"height:95%;width:100%;\">\n      <mat-card id=\"sidebar\" class=\"d-flex flex-column align-items-between justify-content-between mat-elevation-z6\">\n\n        <app-sidebar></app-sidebar>\n\n      </mat-card>\n\n      <mat-card id=\"main-window\" class=\"d-flex p-2 flex-column mat-elevation-z6\">\n\n        <h4 style=\"margin: 10px auto;\">Room: <span class=\"badge badge-secondary\">{{room}}</span></h4>\n\n        <div id=\"messages\" #messagesScroll>\n\n          <p #messages *ngFor=\"let message of messages | async\" onchange=\"console.log('changed from inside');\">\n            <span *ngIf=\"message.type == 'user-message'\"><span class=\"text-muted\" style=\"font-size:8px;margin-right:3px;\"><em>{{message.timeStamp | date: 'shortTime'}}</em></span> <strong>{{message.username}}:</strong> {{message.content}}</span>\n            <span *ngIf=\"message.type == 'user-joined'\" style=\"color:#2196F3;\"><em><strong>{{message.username}}</strong> joined the room at {{message.timeStamp | date: 'shortTime'}}</em></span>\n            <span *ngIf=\"message.type == 'user-disconnect'\" style=\"color:#2196F3;\"><em><strong>{{message.username}}</strong> left the room at {{message.timeStamp | date: 'shortTime'}}</em></span>\n          </p>\n\n        </div>\n\n        <div id=\"chat-input\">\n\n         <app-input></app-input>\n\n        </div>\n\n      </mat-card>\n\n    </div>\n\n  </div>\n\n</div>\n"
 
 /***/ }),
 
@@ -314,6 +302,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 
 
 
@@ -337,7 +328,8 @@ var ChatComponent = /** @class */ (function () {
                 .subscribe(function (response) {
                 var dialogRef = _this.dialog.open(NameDialog, {
                     width: '250px',
-                    disableClose: true
+                    disableClose: true,
+                    data: { room: _this.room }
                 });
                 dialogRef.afterClosed().subscribe(function (result) {
                     _this.username = result;
@@ -346,19 +338,29 @@ var ChatComponent = /** @class */ (function () {
                         room: _this.room
                     });
                     _this._cs.join();
+                    _this.messages = _this._cs.getMessages();
                 });
             }, function (error) {
                 if (error.status == 404) {
-                    _this._alert.set('Oh no! That room doesn\'t exist.');
                     _this._router.navigate(['/']);
                 }
             });
         });
     }
-    ChatComponent.prototype.ngOnInit = function () {
+    ChatComponent.prototype.ngAfterViewInit = function () {
+        var _this = this;
+        this.messagesEl.changes.subscribe(function (change) {
+            _this.scroll.nativeElement.scrollTop = _this.scroll.nativeElement.scrollHeight;
+        });
     };
-    ChatComponent.prototype.onJoin = function () {
-    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_11" /* ViewChild */])('messagesScroll'),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */])
+    ], ChatComponent.prototype, "scroll", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_12" /* ViewChildren */])('messages'),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["W" /* QueryList */])
+    ], ChatComponent.prototype, "messagesEl", void 0);
     ChatComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'app-chat',
@@ -366,7 +368,7 @@ var ChatComponent = /** @class */ (function () {
             styles: [__webpack_require__("../../../../../src/app/chat/chat.component.css")]
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__chat_service__["a" /* ChatService */],
-            __WEBPACK_IMPORTED_MODULE_3__angular_material__["a" /* MatDialog */],
+            __WEBPACK_IMPORTED_MODULE_3__angular_material__["b" /* MatDialog */],
             __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */],
             __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */],
             __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["a" /* HttpClient */],
@@ -376,18 +378,42 @@ var ChatComponent = /** @class */ (function () {
 }());
 
 var NameDialog = /** @class */ (function () {
-    function NameDialog(dialogRef) {
+    function NameDialog(dialogRef, _http, _route, data, _alert) {
         this.dialogRef = dialogRef;
+        this._http = _http;
+        this._route = _route;
+        this.data = data;
+        this._alert = _alert;
+        this.url = '/api/rooms/obj/';
+        this.unique = true;
     }
     NameDialog.prototype.onSubmit = function (username) {
-        this.dialogRef.close(username);
+        var _this = this;
+        if (username === null || username.match(/^\s*$/)) {
+            this._alert.alert('Please enter a valid username.');
+        }
+        else {
+            this._http.get(this.url + this.data.room)
+                .subscribe(function (response) {
+                console.log(response);
+                if (response['userCount'] > 0 && response['users'].hasOwnProperty(username)) {
+                    _this._alert.alert('Sorry, that name is taken.');
+                }
+                else {
+                    _this.dialogRef.close(username);
+                }
+            });
+        }
     };
     NameDialog = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'name-dialog',
             template: "\n  <h1 mat-dialog-title>Hello!</h1>\n  <div mat-dialog-content>\n    <p>Please enter a nickname:</p>\n    <form #f=\"ngForm\" (ngSubmit)=\"onSubmit(f.value.username)\">\n      <mat-form-field>\n        <input matInput placeholder=\"Name\" name=\"username\" [ngModel]=\"username\" autocomplete=\"off\" required>\n      </mat-form-field>\n      <button class=\"btn btn-sm btn-success\" type=\"submit\" [disabled]=\"f.invalid\">Join</button>\n    </form>\n  </div>\n  "
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__angular_material__["c" /* MatDialogRef */]])
+        __param(3, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Inject */])(__WEBPACK_IMPORTED_MODULE_3__angular_material__["a" /* MAT_DIALOG_DATA */])),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__angular_material__["d" /* MatDialogRef */],
+            __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["a" /* HttpClient */],
+            __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */], Object, __WEBPACK_IMPORTED_MODULE_5__alert_service__["a" /* AlertService */]])
     ], NameDialog);
     return NameDialog;
 }());
@@ -404,11 +430,11 @@ var NameDialog = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__("../../../common/esm5/common.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__("../../../forms/esm5/forms.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__chat_routing_module__ = __webpack_require__("../../../../../src/app/chat/chat-routing.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_material_form_field__ = __webpack_require__("../../../material/esm5/form-field.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_material_input__ = __webpack_require__("../../../material/esm5/input.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_material_card__ = __webpack_require__("../../../material/esm5/card.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_material_divider__ = __webpack_require__("../../../material/esm5/divider.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_material_form_field__ = __webpack_require__("../../../material/esm5/form-field.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_material_input__ = __webpack_require__("../../../material/esm5/input.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_material_card__ = __webpack_require__("../../../material/esm5/card.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_material_divider__ = __webpack_require__("../../../material/esm5/divider.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__chat_routing_module__ = __webpack_require__("../../../../../src/app/chat/chat-routing.module.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__sidebar_sidebar_component__ = __webpack_require__("../../../../../src/app/chat/sidebar/sidebar.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__messages_messages_component__ = __webpack_require__("../../../../../src/app/chat/messages/messages.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__input_input_component__ = __webpack_require__("../../../../../src/app/chat/input/input.component.ts");
@@ -444,11 +470,11 @@ var ChatModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_1__angular_common__["b" /* CommonModule */],
                 __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* FormsModule */],
                 __WEBPACK_IMPORTED_MODULE_2__angular_forms__["h" /* ReactiveFormsModule */],
-                __WEBPACK_IMPORTED_MODULE_3__chat_routing_module__["a" /* ChatRoutingModule */],
-                __WEBPACK_IMPORTED_MODULE_4__angular_material_form_field__["c" /* MatFormFieldModule */],
-                __WEBPACK_IMPORTED_MODULE_5__angular_material_input__["b" /* MatInputModule */],
-                __WEBPACK_IMPORTED_MODULE_7__angular_material_divider__["a" /* MatDividerModule */],
-                __WEBPACK_IMPORTED_MODULE_6__angular_material_card__["a" /* MatCardModule */]
+                __WEBPACK_IMPORTED_MODULE_7__chat_routing_module__["a" /* ChatRoutingModule */],
+                __WEBPACK_IMPORTED_MODULE_3__angular_material_form_field__["c" /* MatFormFieldModule */],
+                __WEBPACK_IMPORTED_MODULE_4__angular_material_input__["b" /* MatInputModule */],
+                __WEBPACK_IMPORTED_MODULE_6__angular_material_divider__["a" /* MatDividerModule */],
+                __WEBPACK_IMPORTED_MODULE_5__angular_material_card__["a" /* MatCardModule */]
             ],
             declarations: [
                 __WEBPACK_IMPORTED_MODULE_11__chat_component__["b" /* NameDialog */],
@@ -532,8 +558,6 @@ var ChatService = /** @class */ (function () {
                 this._messages.next(this.messages);
                 break;
             case 'user-disconnect':
-                console.log('REMOVING: ');
-                console.log(this.users[this.users.indexOf(response.username)]);
                 this.users.splice(this.users.indexOf(response.username), 1);
                 this.userCount--;
                 this._userCount.next(this.userCount);
@@ -546,6 +570,7 @@ var ChatService = /** @class */ (function () {
                 this._messages.next(this.messages);
                 break;
             default:
+                break;
         }
     };
     ChatService.prototype.event = function (type, content) {
@@ -625,7 +650,9 @@ var InputComponent = /** @class */ (function () {
     InputComponent.prototype.ngOnInit = function () {
     };
     InputComponent.prototype.onSend = function (message) {
-        this._cs.send(message);
+        if (message !== null && !message.match(/^\s*$/)) {
+            this._cs.send(message);
+        }
     };
     InputComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
@@ -645,7 +672,7 @@ var InputComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/chat/messages/messages.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p *ngFor=\"let message of messages | async\">\n  <span *ngIf=\"message.type == 'user-message'\"><span class=\"text-muted\" style=\"font-size:8px;margin-right:3px;\"><em>{{message.timeStamp | date: 'shortTime'}}</em></span> <strong>{{message.username}}:</strong> {{message.content}}</span>\n  <span *ngIf=\"message.type == 'user-joined'\" style=\"color:#2196F3;\"><em><strong>{{message.username}}</strong> joined the room at {{message.timeStamp | date: 'shortTime'}}</em></span>\n  <span *ngIf=\"message.type == 'user-disconnect'\" style=\"color:#2196F3;\"><em><strong>{{message.username}}</strong> left the room at {{message.timeStamp | date: 'shortTime'}}</em></span>\n</p>\n"
+module.exports = "<p #messages *ngFor=\"let message of messages | async\" onchange=\"console.log('changed from inside');\">\n  <span *ngIf=\"message.type == 'user-message'\"><span class=\"text-muted\" style=\"font-size:8px;margin-right:3px;\"><em>{{message.timeStamp | date: 'shortTime'}}</em></span> <strong>{{message.username}}:</strong> {{message.content}}</span>\n  <span *ngIf=\"message.type == 'user-joined'\" style=\"color:#2196F3;\"><em><strong>{{message.username}}</strong> joined the room at {{message.timeStamp | date: 'shortTime'}}</em></span>\n  <span *ngIf=\"message.type == 'user-disconnect'\" style=\"color:#2196F3;\"><em><strong>{{message.username}}</strong> left the room at {{message.timeStamp | date: 'shortTime'}}</em></span>\n</p>\n"
 
 /***/ }),
 
@@ -674,6 +701,25 @@ var MessagesComponent = /** @class */ (function () {
     }
     MessagesComponent.prototype.ngOnInit = function () {
     };
+    MessagesComponent.prototype.ngAfterViewInit = function () {
+        this.messagesEl.changes.subscribe(function (change) {
+            //console.log('EL CHANGE');
+            //this.onChange();
+        });
+    };
+    MessagesComponent.prototype.onChange = function () {
+        this.changed.emit(null);
+    };
+    MessagesComponent.prototype.ngOnChanges = function () {
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_12" /* ViewChildren */])('messages'),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["W" /* QueryList */])
+    ], MessagesComponent.prototype, "messagesEl", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["R" /* Output */])(),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["x" /* EventEmitter */])
+    ], MessagesComponent.prototype, "changed", void 0);
     MessagesComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'app-messages',
@@ -692,7 +738,7 @@ var MessagesComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/chat/sidebar/sidebar.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"d-flex flex-column\">\n  <h4 style=\"margin: 0 auto;\">Connected<span class=\"badge badge-pill badge-primary\" style=\"margin-left:10px;\">{{userCount | async}}</span></h4>\n\n  <ul style=\"border-top: 1px solid lightgrey;margin-top:10px;\" *ngIf=\"users\">\n    <div style=\"margin-top:10px;\">\n      <li *ngFor=\"let user of users | async\">{{user}}</li>\n    </div>\n  </ul>\n</div>\n\n<!--\n<div class=\"d-flex\" style=\"border-top: 1px solid lightgrey;padding:10px;\">\n  <button class=\"btn btn-primary btn-block\" style=\"margin-top:10px;\" (click)=\"onJoin()\">Options</button><br>\n</div>\n-->\n"
+module.exports = "<div class=\"d-flex flex-column\">\n  <h4 style=\"margin: 0 auto;\">Connected<span class=\"badge badge-primary\" style=\"margin-left:10px;\">{{userCount | async}}</span></h4>\n\n  <ul style=\"border-top: 1px solid lightgrey;margin-top:10px;\" *ngIf=\"users\">\n    <div style=\"margin-top:10px;\">\n      <li *ngFor=\"let user of users | async\">{{user}}</li>\n    </div>\n  </ul>\n</div>\n\n<!--\n<div class=\"d-flex\" style=\"border-top: 1px solid lightgrey;padding:10px;\">\n  <button class=\"btn btn-primary btn-block\" style=\"margin-top:10px;\" (click)=\"onJoin()\">Options</button><br>\n</div>\n-->\n"
 
 /***/ }),
 
@@ -761,7 +807,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var SocketService = /** @class */ (function () {
     function SocketService() {
         var _this = this;
-        this._server = 'http://18.219.102.107:8080';
         this._response = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["b" /* Subject */]();
         this._socket = __WEBPACK_IMPORTED_MODULE_2_socket_io_client__();
         this._socket.on('event', function (data) {
@@ -806,7 +851,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/header/header.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-expand-lg navbar-light bg-light mat-elevation-z6\">\n  <div class=\"container\">\n  <a class=\"navbar-brand text-primary\" href=\"#\"><strong>Chit Chat</strong></a>\n  <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarColor03\" aria-controls=\"navbarColor03\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n\n  <div class=\"collapse navbar-collapse\" id=\"navbarColor03\">\n    <ul class=\"navbar-nav mr-auto\">\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#\">Donate</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#\">Github</a>\n      </li>\n    </ul>\n    <span class=\"navbar-text\">\n      A Lightweight Chat Client\n    </span>\n  </div>\n  </div>\n</nav>\n"
+module.exports = "<nav class=\"navbar navbar-expand-lg navbar-dark bg-primary mat-elevation-z6\" style=\"opacity:.90;\">\n  <div class=\"container\">\n  <a class=\"navbar-brand\" href=\"#\">Chit Chat</a>\n  <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarColor03\" aria-controls=\"navbarColor03\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n\n  <div class=\"collapse navbar-collapse\" id=\"navbarColor03\">\n    <ul class=\"navbar-nav mr-auto\">\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"\">Donate</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"\">Github</a>\n      </li>\n    </ul>\n    <span class=\"navbar-text\">\n      <em>A Lightweight Chat Client</em>\n    </span>\n  </div>\n  </div>\n</nav>\n"
 
 /***/ }),
 
@@ -885,12 +930,13 @@ var HomeRoutingModule = /** @class */ (function () {
 /***/ "../../../../../src/app/home/home.component.css":
 /***/ (function(module, exports, __webpack_require__) {
 
+var escape = __webpack_require__("../../../../css-loader/lib/url/escape.js");
 exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
 // imports
 
 
 // module
-exports.push([module.i, ".center {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    vertical-align: middle;\n}\n\n.home-bg {\n  background: rgba(0, 0, 0, .30);\n  padding: 1em;\n  max-width: 700px;\n  border-radius: 30px;\n}\n\n.home-text {\n  color: white;\n}\n\nng-template[matExpansionPanelContent]#create {\n  display: none;\n  visibility: hidden;\n}\n\n.form-control,\n.form-control:focus {\n  -webkit-box-shadow: none;\n          box-shadow: none;\n}\n", ""]);
+exports.push([module.i, ".center {\n  display: -webkit-inline-box;\n  display: -ms-inline-flexbox;\n  display: inline-flex;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  vertical-align: middle;\n}\n\n.home-bg {\n  background: rgba(0, 0, 0, .30);\n  padding: 1em;\n  max-width: 700px;\n  border-radius: 30px;\n}\n\n.home-text {\n  color: white;\n}\n\nng-template[matExpansionPanelContent]#create {\n  display: none;\n  visibility: hidden;\n}\n\n.form-control,\n.form-control:focus {\n  -webkit-box-shadow: none;\n          box-shadow: none;\n}\n\n.bg {\n  background: url(" + escape(__webpack_require__("../../../../../src/assets/img/bg.jpg")) + ") no-repeat center center fixed;\n  background-size: cover;\n  position:fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\n", ""]);
 
 // exports
 
@@ -903,7 +949,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"d-flex flex-column\" style=\"background-color:lightgray;position:fixed;top: 0; left: 0; width: 100%; height: 100%;justify-content:center;align-items:center;\">\n\n  <div style=\"position:fixed;top:0;width:100%;\">\n      <app-header></app-header>\n  </div>\n\n<div class=\"mat-elevation-z6\" style=\"width:75%;text-align:center;margin-top:-100px;\">\n  <mat-accordion>\n\n    <mat-expansion-panel>\n      <mat-expansion-panel-header>\n        <mat-panel-title>\n        <mat-icon class=\"text-primary\" style=\"margin-right:10px;\">person_outline</mat-icon>\n        Create A New Room\n        </mat-panel-title>\n        <mat-panel-description>\n      </mat-panel-description>\n      </mat-expansion-panel-header>\n      <button class=\"btn btn-primary\" (click)=\"onCreate()\">Public</button>\n      <button class=\"btn btn-secondary\" disabled>Private</button>\n    </mat-expansion-panel>\n\n    <mat-expansion-panel>\n      <mat-expansion-panel-header>\n        <mat-panel-title>\n          <mat-icon class=\"text-primary\" style=\"margin-right:10px;\">group_add</mat-icon>\n          Join A Chat\n        </mat-panel-title>\n        <mat-panel-description>\n\n        </mat-panel-description>\n      </mat-expansion-panel-header>\n      <form (ngSubmit)=\"onJoin(f.value.room)\" #f=ngForm>\n        <mat-form-field style=\"width:60%;\">\n          <input matInput placeholder=\"Room\"\n                          class=\"form-control form-control-lg\"\n                          ngModel\n                          #room=\"ngModel\"\n                          name=\"room\"\n                          required>\n        </mat-form-field>\n        <button type=\"submit\" class=\"btn btn-primary\" [disabled]=\"f.invalid\">Join</button>\n      </form>\n\n    </mat-expansion-panel>\n\n    <mat-expansion-panel>\n      <mat-expansion-panel-header>\n        <mat-panel-title>\n          <mat-icon class=\"text-primary\" style=\"margin-right:10px;\">question_answer</mat-icon>\n          F.A.Q.\n        </mat-panel-title>\n        <mat-panel-description>\n        </mat-panel-description>\n      </mat-expansion-panel-header>\n      <h4>What this question?</h4>\n      <p>Heres a bunch of responses for the above question.</p>\n      <br>\n      <h4>What this other question about?</h4>\n      <p>Heres a bunch of responses for the above question.</p>\n      <br>\n      <h4>What another this is question?</h4>\n      <p>Heres a bunch of responses for the above question.</p>\n      <br>\n    </mat-expansion-panel>\n\n  </mat-accordion>\n</div>\n\n\n</div>\n"
+module.exports = "<div class=\"d-flex flex-column bg\" style=\"\">\n\n  <div style=\"position:fixed;top:0;width:100%;\">\n      <app-header></app-header>\n  </div>\n\n<div class=\"mat-elevation-z6\" style=\"width:75%;text-align:center;\">\n  <mat-accordion>\n\n    <mat-expansion-panel style=\"opacity:.93;\">\n      <mat-expansion-panel-header>\n        <mat-panel-title>\n        <mat-icon class=\"text-primary\" style=\"margin-right:10px;\">person_outline</mat-icon>\n        Create A New Room\n        </mat-panel-title>\n        <mat-panel-description>\n      </mat-panel-description>\n      </mat-expansion-panel-header>\n      <button class=\"btn btn-primary\" (click)=\"onCreate()\">Public</button>\n      <button class=\"btn btn-secondary\" disabled>Private</button>\n    </mat-expansion-panel>\n\n    <mat-expansion-panel style=\"opacity:.93;\">\n      <mat-expansion-panel-header>\n        <mat-panel-title>\n          <mat-icon class=\"text-primary\" style=\"margin-right:10px;\">group_add</mat-icon>\n          Join A Chat\n        </mat-panel-title>\n        <mat-panel-description>\n\n        </mat-panel-description>\n      </mat-expansion-panel-header>\n      <form (ngSubmit)=\"onJoin(f.value.room)\" #f=ngForm>\n        <mat-form-field style=\"width:60%;\">\n          <input matInput placeholder=\"Room\"\n                          class=\"form-control form-control-lg\"\n                          ngModel\n                          #room=\"ngModel\"\n                          name=\"room\"\n                          required>\n        </mat-form-field>\n        <button type=\"submit\" class=\"btn btn-primary\" [disabled]=\"f.invalid\">Join</button>\n      </form>\n\n    </mat-expansion-panel>\n\n    <mat-expansion-panel style=\"opacity:.93;\">\n      <mat-expansion-panel-header>\n        <mat-panel-title>\n          <mat-icon class=\"text-primary\" style=\"margin-right:10px;\">question_answer</mat-icon>\n          F.A.Q.\n        </mat-panel-title>\n        <mat-panel-description>\n        </mat-panel-description>\n      </mat-expansion-panel-header>\n      <h4 class=\"text-primary\">What is Chit Chat?</h4>\n      <p>Chit Chat is a simple, lightweight chat client so you can worry less about users and logins and focus on what matters: chatting!</p>\n      <br>\n      <h4 class=\"text-primary\">How do I start chatting?</h4>\n      <p>Create a new room above and choose a name. (Private rooms coming soon!)</p>\n      <br>\n      <h4 class=\"text-primary\">How do I invite others to a chat?</h4>\n      <p>Users can join a chat room by going directly to an open room's url, or by using the join form above with a valid room id.</p>\n      <br>\n      <h4 class=\"text-primary\">What about all of my other questions?</h4>\n      <p>This is an ongoing open-source project from students at Oregon State University, and will be updated periodically. Check the github repository for more info!</p>\n      <br>\n    </mat-expansion-panel>\n\n  </mat-accordion>\n</div>\n\n\n</div>\n"
 
 /***/ }),
 
@@ -937,8 +983,7 @@ var HomeComponent = /** @class */ (function () {
         this._cs = _cs;
         this._router = _router;
         this._alert = _alert;
-        this.url = "/api/rooms";
-        this._alert.check();
+        this.url = "/api/rooms/";
     }
     HomeComponent.prototype.ngOnInit = function () {
     };
@@ -950,7 +995,15 @@ var HomeComponent = /** @class */ (function () {
         });
     };
     HomeComponent.prototype.onJoin = function (room) {
-        this._router.navigate(['chat', room]);
+        var _this = this;
+        this._http.get(this.url + room)
+            .subscribe(function (response) {
+            _this._router.navigate(['chat', room]);
+        }, function (error) {
+            if (error.status == 404) {
+                _this._alert.alert('Oh no! That room doesn\'t exist.');
+            }
+        });
     };
     HomeComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
@@ -977,10 +1030,10 @@ var HomeComponent = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomeModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__("../../../common/esm5/common.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_routing_module__ = __webpack_require__("../../../../../src/app/home/home-routing.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_material_expansion__ = __webpack_require__("../../../material/esm5/expansion.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_material_icon__ = __webpack_require__("../../../material/esm5/icon.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_material_button__ = __webpack_require__("../../../material/esm5/button.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_material_expansion__ = __webpack_require__("../../../material/esm5/expansion.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_material_icon__ = __webpack_require__("../../../material/esm5/icon.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_material_button__ = __webpack_require__("../../../material/esm5/button.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__home_routing_module__ = __webpack_require__("../../../../../src/app/home/home-routing.module.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1000,10 +1053,10 @@ var HomeModule = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["K" /* NgModule */])({
             imports: [
                 __WEBPACK_IMPORTED_MODULE_1__angular_common__["b" /* CommonModule */],
-                __WEBPACK_IMPORTED_MODULE_2__home_routing_module__["a" /* HomeRoutingModule */],
-                __WEBPACK_IMPORTED_MODULE_4__angular_material_icon__["a" /* MatIconModule */],
-                __WEBPACK_IMPORTED_MODULE_5__angular_material_button__["a" /* MatButtonModule */],
-                __WEBPACK_IMPORTED_MODULE_3__angular_material_expansion__["a" /* MatExpansionModule */]
+                __WEBPACK_IMPORTED_MODULE_5__home_routing_module__["a" /* HomeRoutingModule */],
+                __WEBPACK_IMPORTED_MODULE_3__angular_material_icon__["a" /* MatIconModule */],
+                __WEBPACK_IMPORTED_MODULE_4__angular_material_button__["a" /* MatButtonModule */],
+                __WEBPACK_IMPORTED_MODULE_2__angular_material_expansion__["a" /* MatExpansionModule */]
             ],
             declarations: [],
             exports: []
@@ -1013,6 +1066,13 @@ var HomeModule = /** @class */ (function () {
 }());
 
 
+
+/***/ }),
+
+/***/ "../../../../../src/assets/img/bg.jpg":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "bg.f0f5291e489861eb53f2.jpg";
 
 /***/ }),
 

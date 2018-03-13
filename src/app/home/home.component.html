@@ -1,13 +1,13 @@
-<div class="d-flex flex-column" style="background-color:lightgray;position:fixed;top: 0; left: 0; width: 100%; height: 100%;justify-content:center;align-items:center;">
+<div class="d-flex flex-column bg" style="">
 
   <div style="position:fixed;top:0;width:100%;">
       <app-header></app-header>
   </div>
 
-<div class="mat-elevation-z6" style="width:75%;text-align:center;margin-top:-100px;">
+<div class="mat-elevation-z6" style="width:75%;text-align:center;">
   <mat-accordion>
 
-    <mat-expansion-panel>
+    <mat-expansion-panel style="opacity:.93;">
       <mat-expansion-panel-header>
         <mat-panel-title>
         <mat-icon class="text-primary" style="margin-right:10px;">person_outline</mat-icon>
@@ -20,7 +20,7 @@
       <button class="btn btn-secondary" disabled>Private</button>
     </mat-expansion-panel>
 
-    <mat-expansion-panel>
+    <mat-expansion-panel style="opacity:.93;">
       <mat-expansion-panel-header>
         <mat-panel-title>
           <mat-icon class="text-primary" style="margin-right:10px;">group_add</mat-icon>
@@ -44,7 +44,7 @@
 
     </mat-expansion-panel>
 
-    <mat-expansion-panel>
+    <mat-expansion-panel style="opacity:.93;">
       <mat-expansion-panel-header>
         <mat-panel-title>
           <mat-icon class="text-primary" style="margin-right:10px;">question_answer</mat-icon>
@@ -53,14 +53,17 @@
         <mat-panel-description>
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <h4>What this question?</h4>
-      <p>Heres a bunch of responses for the above question.</p>
+      <h4 class="text-primary">What is Chit Chat?</h4>
+      <p>Chit Chat is a simple, lightweight chat client so you can worry less about users and logins and focus on what matters: chatting!</p>
       <br>
-      <h4>What this other question about?</h4>
-      <p>Heres a bunch of responses for the above question.</p>
+      <h4 class="text-primary">How do I start chatting?</h4>
+      <p>Create a new room above and choose a name. (Private rooms coming soon!)</p>
       <br>
-      <h4>What another this is question?</h4>
-      <p>Heres a bunch of responses for the above question.</p>
+      <h4 class="text-primary">How do I invite others to a chat?</h4>
+      <p>Users can join a chat room by going directly to an open room's url, or by using the join form above with a valid room id.</p>
+      <br>
+      <h4 class="text-primary">What about all of my other questions?</h4>
+      <p>This is an ongoing open-source project from students at Oregon State University, and will be updated periodically. Check the github repository for more info!</p>
       <br>
     </mat-expansion-panel>
 

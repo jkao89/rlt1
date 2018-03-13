@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var dbHelper;
-// var jwt = require('express-jwt');
+var jwt = require('express-jwt');
 const cryptoRandomString = require('crypto-random-string');
 
 

@@ -80,6 +80,10 @@ module.exports = function(app) {
         var countRef = database.ref('rooms/' + roomId + '/userCount');
         var roomRef = database.ref('rooms/' + roomId);
         var usersRef = database.ref('rooms/' + roomId + '/users');
+        userId = userId.trim();         // Trims whitespace from ends of userId
+        if (userId.length == 0) {
+            return { 'error' : 'userid cannot be empty string' };
+        }
         var user = { [userId] : true };
         // Check if room exists, then if user exists
         return roomRef.once('value')

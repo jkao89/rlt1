@@ -7,7 +7,6 @@ const server = http.createServer(app);
 const io = require('socket.io')(server);
 const api = require('./routes/api');
 const firebase = require('firebase');
-const cryptoRandomString = require('crypto-random-string');
 
 //  firebase setup
 var config = {
@@ -39,6 +38,7 @@ app.use(function (req, res, next) {
     next();
 });
 
+
 // API location
 app.use('/api', api);
 
@@ -69,17 +69,16 @@ io.on('connection', function(socket){
     
     socket.on('event', function(payload){
         switch(payload.type) {
-            
             case 'user-joined':
                 /*  payload = { type: 'user-joined',
                                 room: string,
                                 username: string,   }
                 */
                 
-                // check if payload.username is unique in db
+                // check if room exists and username is unique in db
                 var user = dbHelper.addUser(payload.room, payload.username);
                 user.then((result) => {
-                    if (!result.error) {    // Sam : I changed this from 'result'
+                    if (!result.error) {  
                         // if yes, add the client socket to socket.room
                         console.log('User joined room ' + payload.room);
                         socket.join(payload.room);
@@ -94,52 +93,19 @@ io.on('connection', function(socket){
                          // emit to all sockets in room
                         io.to(payload.room).emit('event', payload);
                     } else {
+                        payload.success = false;
                         if (result.error == 'room invalid') {
-                            // if no, add success:false, error:error_message to payload
-                            payload.success = false;
+                            // if no, error:error_message to payload
                             payload.error = 'Room not found';
                         } else if (result.error == 'user exists') {
-                            payload.success = false;
                             payload.error = 'User already exists';
+                        } else if (result.error == 'userid cannot be empty string') {
+                            payload.error = 'UserId is empty string';
                         }
                         // emit only to single client
                             console.log(socket.id);
                             io.to(socket.id).emit('event', payload);
                     }
-                        
-                        // var room = dbHelper.getRoom(payload.room);
-                        // room.then((result) => {
-                        //     if (result) {
-                        //         // if yes, add the room object to the payload
-                        //         payload.room_info = result;
-                        //         payload.room_info.users = Object.keys(result.users);
-                        //         payload.success = true;
-                                
-                        //         console.log(payload);
-                                
-                        //         // emit to all sockets in room
-                        //         io.to(payload.room).emit('event', payload);
-                        //     }
-                        //     else {
-                        //         // if no, add success:false, error:error_message to payload
-                        //         payload.success = false;
-                        //         payload.error = 'Room not found';
-                                
-                        //         // emit only to single client
-                        //         console.log(socket.id);
-                        //         io.to(socket.id).emit('event', payload);
-                        //     }
-                        //});
-                    // }
-                    // else {
-                    //     // if no, add success:false, error:error_message to payload
-                    //     payload.success = false;
-                    //     payload.error = 'username already taken';
-                        
-                    //     // emit only to single client
-                    //     console.log(socket.id);
-                    //     io.to(socket.id).emit('event', payload);
-                    // }
                 });
                 break;
             
@@ -151,8 +117,12 @@ io.on('connection', function(socket){
                 
                 console.log(payload);
                 
-                // emit the entire payload to all sockets in room
-                io.to(payload.room).emit('event', payload);
+                // check if the client socket has joined this room
+                if (Object.keys(socket.rooms).indexOf(payload.room) > -1) {
+                    // if yes, emit the entire payload to all sockets in room
+                    io.to(payload.room).emit('event', payload);
+                }
+                
                 break;
         }
     });
@@ -164,23 +134,29 @@ io.on('connection', function(socket){
             username: socket.username,
             timeStamp: new Date()
         };
-        io.to(socket.room).emit('event', event);
-        console.log('User disconnected');
         
-        // remove user from db
-        var userDeleted = dbHelper.deleteUser(socket.room, socket.username);
-        userDeleted.then((result) => {
-            if (!result.error) {
-                // delete room if all users have left
-                if (result.userCount < 1) {
-                    dbHelper.deleteRoom(socket.room);
+        // check if user joined a room before disconnecting
+        if (socket.room) {
+            io.to(socket.room).emit('event', event);
+
+            // remove user from db
+            var userDeleted = dbHelper.deleteUser(socket.room, socket.username);
+            userDeleted.then((result) => {
+                if (!result.error) {
+                    // delete room if all users have left
+                    if (result.userCount < 1) {
+                        console.log('Room ' + socket.room + ' is now empty and will be deleted');
+                        dbHelper.deleteRoom(socket.room);
+                    }
                 }
-            }
-            else {
-                console.log("Error removing user " + socket.username + " from room " + socket.room);
-                console.log("Error message: " + result.error);
-            }
-        });
+                else {
+                    console.log("Error removing user " + socket.username + " from room " + socket.room);
+                    console.log("Error message: " + result.error);
+                }
+            });
+        } else {
+            console.log('User disconnected from global socket');
+        }
     });
 });
 
